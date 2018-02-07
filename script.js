@@ -1,7 +1,6 @@
 function isDelim(c) {
     return c == ' ';
 }
-
 function isOperator(c) {
     return c == '~' || c == '-' || c == '|' || c == '&' || c == '!';
 }
@@ -15,23 +14,34 @@ function processOperator(st, op) {
     else alert('!'+r);
     switch (op) {
         case '~':
-            st.push("("+l + '~' + r+")");
+            if(r==l)
+                st.push('1');
+            else st.push('0');
             break;
         case '-':
-            st.push("("+l + '-' + r+")");
+            if(r==l|r=='1')
+                st.push('1');
+            else st.push('0');
             break;
         case '|':
-            st.push("("+l + '|' + r+")");
+            if(l=='1'||r=='1')
+            st.push('1');
+            else st.push('0');
             break;
         case '&':
-            st.push("("+l + '&' + r+")");
+            if(l==r&l=='1')
+                st.push(l);
+            else st.push(r);
             break;
         case '!':
-            st.push("(!" + r+")");
+            if(r=='1')
+                st.push('0');
+            else st.push('1');
             break;
     }
 }
 var set=[];
+
 function addInSet(el){
     var bool=true;
     for(var i=0; i<set.length;i++){
@@ -46,7 +56,7 @@ function addInSet(el){
 }
 
 function isLetter(s) {
-    if (s >= 'A' && s <= 'K') {
+    if (s == '1' || s == '0') {
         addInSet(s);
         return true;
     }
@@ -61,6 +71,12 @@ function addInSetIfVariable(s) {
     else return false;
 }
 
+function isVariable(s) {
+    if (s >= 'A' && s <= 'K') {
+        return true;
+    }
+    else return false;
+}
 
 function priority(op) {
     switch (op) {
@@ -79,7 +95,7 @@ function priority(op) {
     }
 }
 
-function eval(s) {
+function eval(s){
     var st = [];
     var op = [];
     for (i = 0; i < s.length; i++) {
@@ -111,8 +127,26 @@ function eval(s) {
 
 function createVariavlesSet(str) {
     for(i=0;i<str.length;i++){
-        addInSetIfVariable(str[i])
+        if(isVariable(str[i])){
+            addInSet(str[i])
+        }
     }
 }
-//alert(eval("A|B|!(C&!D)"));
+
+function initVariablesInExpression(str){
+    var newStr=str.split("");
+    for(i=0;i<str.length;i++){
+    for(j=0;j<set.length;j++)
+        if(str[i]===set[j]){
+            newStr[i]=(i,variables[j]);
+        }
+    }
+    return newStr.join("");
+}
+/*
+createVariavlesSet("A|B|!(C&!D)");
+var variables=[0,0,1,1];
+alert(set);
+alert(initVariablesInExpression("A|B|!(C&!D)"));*/
+alert(eval("(1|0)&!0"));
 //alert(set);
