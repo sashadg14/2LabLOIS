@@ -15,18 +15,18 @@ function check_str(str) {
             break
         }
     }
-    return replase_operations_res(a);
+    return /*replase_operations_res*/(a);
 }
 
 function replase_letters(str){
-    var regexp = /\([A-Z,1,0]\)/gi;
+    var regexp = /[A-Z,1,0]/gi;
     var ab = str.replace(regexp,"A");
     if(ab!=null||ab!=undefined)
         return ab;
     else return str;
 }
 function replase_neg_letters(str){
-    var regexp = /\![A-Z,1,0]/g;
+    var regexp = /\(\![A-Z,1,0]\)/g;
     var ab = str.replace(regexp,"A");
     if(ab!=null||ab!=undefined)
         return ab;
